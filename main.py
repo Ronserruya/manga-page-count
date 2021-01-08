@@ -20,8 +20,8 @@ def main(manga_id):
     manga = mangadex.get_manga(manga_id)
     print(f'Starting {manga.title}')
 
-    if os.path.isfile(f'{manga_id}.json'):
-        with open(f'{manga_id}.json') as f:
+    if os.path.isfile(os.path.join('results', f'{manga_id}.json')):
+        with open(os.path.join('results', f'{manga_id}.json')) as f:
             chapter_to_page_count = {float(key): value for key, value in json.load(f).items()}
     else:
         # Map chapters to ids, 9097 is MangaPlus, and page count is not available for it
@@ -46,7 +46,7 @@ def main(manga_id):
             print(f'\rProgress: {progress}/{len(chapters_to_ids)}', end='')
         print('\n')
 
-        with open(f'{manga_id}.json', 'w') as f:
+        with open(os.path.join('results', f'{manga_id}.json', 'w')) as f:
             json.dump(chapter_to_page_count, f)
 
     return manga.title, [x for x in chapter_to_page_count.items() if not (int(x[0]) != x[0] and x[1] < 10)]
@@ -64,10 +64,11 @@ if __name__ == '__main__':
                             x_title='Chapter',
                             show_legend=False,
                             style=chart_style,
-                            width=2000)
+                            width=2000,
+                            range=(0, max(x[1] for x in page_count)))
 
         chart = pygal.XY(config=conf)
         chart.add(name, page_count)
-        chart.render_in_browser()
-        chart.render_to_file(f'{name}.svg')
-        chart.render_to_png(f'{name}.png')
+        #chart.render_in_browser()
+        chart.render_to_file(os.path.join('results', f'{name}.svg'))
+        chart.render_to_png(os.path.join('results', f'{name}.png'))
