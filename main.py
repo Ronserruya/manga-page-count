@@ -54,7 +54,7 @@ def main(manga_id):
 
 if __name__ == '__main__':
     chart_style = Style(title_font_size=30)
-    for id_ in [607, 429, 39, 5, 3056, 7139, 82, 12714, 35, 558,
+    for id_ in [429, 39, 607, 5, 3056, 7139, 82, 12714, 35, 558,
                 2334, 286, 6770, 8436, 13502, 19531, 939, 18198, 1073, 84]:
 
         name, page_count = main(id_)
